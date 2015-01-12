@@ -158,22 +158,13 @@ class imageAnalyzer {
     }
   }
   
-  public int[] getRectSize(int iter) {
-    int xCenter, yCenter, x1, x2, y1, y2;
+  public int getRect(int iter) {
     Pixel p = this.thePixels.get(iter);
     
     double sq = Math.sqrt(p.amount);
     int rad = (int) Math.round(sq);
     
-    xCenter = width / 2;
-    yCenter = height / 2;
-    x1 = xCenter - rad / 2;
-    x2 = xCenter + rad / 2;
-    y1 = yCenter - rad / 2;
-    y2 = yCenter + rad / 2;
-    
-    int[] coord = {x1, y1, x2, y2};
-    return coord;
+    return rad;
   }
   
   public int[] getColor(int iter) {

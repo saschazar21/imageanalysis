@@ -38,19 +38,20 @@ void launcher() {
       System.out.println("No valid file extension. \nTerminating.");
       System.exit(1);
   }
-  mX = width;
-  mY = height;
+  mX = width / 2;
+  mY = height / 2;
 }
 
 void draw() {
-  int[] coord = a.getRectSize(iter);
+  int rad = a.getRect(iter);
   int[] c = a.getColor(iter);
   image(p.initialImage(), 0, 0);
   image(p.returnImage(), 0, 0);
   fill(c[0], c[1], c[2]);
   noStroke();
   translate(mX - width / 2, mY - height / 2);
-  rect(coord[0], coord[1], coord[2], coord[3]);
+  rectMode(CENTER);
+  rect(mX, mY, rad, rad);
 }
 
 void mouseDragged() {
