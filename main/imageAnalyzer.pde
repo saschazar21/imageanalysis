@@ -40,6 +40,16 @@ class imageAnalyzer {
       return this.c;
     }
     
+    public int[] getColorArray() {
+      int r, g, b;
+      r = (this.c >> 16) & 0xFF;
+      g = (this.c >> 8) & 0xFF;
+      b = (this.c) & 0xFF;
+      
+      int[] c = {r, g, b};
+      return c;
+    }
+    
     public String toString() {
       int r,g,b;
       r = (this.c >> 16) & 0xFF;
@@ -127,9 +137,6 @@ class imageAnalyzer {
         System.out.println(p);
       }
     }
-    
-    //color[] pixelArray = this.convertToArray();
-    //this.img.setPixelArray(pixelArray);
   }
   
   private void fillList() {
@@ -151,42 +158,28 @@ class imageAnalyzer {
     }
   }
   
-  public void fillColorValue(int index) {
-    int iter = 0;
-    color[] pixelArray = this.img.getPixelArray();
-    Pixel p = this.thePixels.get(index);
-    float sq = (float) Math.sqrt(p.amount);
+  public int[] getRectSize(int iter) {
+    int xCenter, yCenter, x1, x2, y1, y2;
+    Pixel p = this.thePixels.get(iter);
     
-    int restCol = 0;
-    if ((int) sq > 0) {
-      //restCol = (p.amount - (int) sq) / (int) sq;
-      sq = Math.round(sq);
-    }
+    double sq = Math.sqrt(p.amount);
+    int rad = (int) Math.round(sq);
     
-    Coordinate c = this.coordinates.get(iter++);
-    while ((c.x + sq) > this.img.theWidth || (c.y + sq + restCol) > this.img.theHeight) {
-      if (iter < this.coordinates.size()) {
-        c = this.coordinates.get(iter++);
-      } else {
-        break;
-      }
-    }
-    this.coordinates.remove(--iter);
-    int current = c.x + c.y * this.img.theWidth;
-    for (int i = 0; i < ((int) sq + restCol); i++) {
-      for (int j = 0; j < (int) sq; j++) {
-        if ((current + j) < pixelArray.length) {
-          pixelArray[current + j] = color(p.getColor());
-        } else {
-          break;
-        }
-      }
-      current += this.img.theWidth;
-    }
-    this.coordinates.addLast(new Coordinate(c.x + (int) sq, c.y));
-    this.coordinates.addLast(new Coordinate(c.x, c.y + (int) sq + restCol));
+    xCenter = width / 2;
+    yCenter = height / 2;
+    x1 = xCenter - rad / 2;
+    x2 = xCenter + rad / 2;
+    y1 = yCenter - rad / 2;
+    y2 = yCenter + rad / 2;
     
-    this.img.setPixelArray(pixelArray);
+    int[] coord = {x1, y1, x2, y2};
+    return coord;
+  }
+  
+  public int[] getColor(int iter) {
+    Pixel p = this.thePixels.get(iter);
+    
+    return p.getColorArray();
   }
   
   private color[] convertToArray() {
