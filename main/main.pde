@@ -9,7 +9,7 @@ String ext;
 int iter = 0;
 
 void setup() {
-  frameRate(1);
+  frameRate(24);
   //size(640,480);
   JFileChooser chooser = new JFileChooser();
   chooser.setCurrentDirectory(new File(System.getProperty("user.home")));

@@ -143,20 +143,26 @@ class imageAnalyzer {
     color[] pixelArray = this.img.getPixelArray();
     Pixel p = this.thePixels.get(index);
     float sq = (float) Math.sqrt(p.amount);
-    //int restCol = (p.amount - (int) sq) / (int) sq;
+    
     int restCol = 0;
+    if ((int) sq > 0) {
+      restCol = (p.amount - (int) sq) / (int) sq;
+    }
+    
     int current = this.possibleSquare[0] + this.possibleSquare[1] * this.img.theWidth;
     for (int i = 0; i < ((int) sq + restCol); i++) {
       for (int j = 0; j < (int) sq; j++) {
-        if ((current + j) < pixelArray.length) {
+        if (current == 0 || (current + j) % this.img.theWidth != 0 && (current + j) < pixelArray.length) {
           pixelArray[current + j] = color(p.getColor());
+        } else {
+          j = (int) sq;
         }
       }
       current += this.img.theWidth;
     }
     this.possibleSquare[0] += (int) sq;
     if (this.possibleSquare[0] > this.img.theWidth) {
-      this.possibleSquare[0] -= (int) sq;
+      this.possibleSquare[0] = 0;
       this.possibleSquare[1] += (int) sq + restCol;
     }
     this.img.setPixelArray(pixelArray);
