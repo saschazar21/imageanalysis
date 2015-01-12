@@ -6,8 +6,10 @@ imageAnalyzer a;
 imageProcessor p;
 String location;
 String ext;
+int iter = 0;
 
 void setup() {
+  frameRate(1);
   //size(640,480);
   JFileChooser chooser = new JFileChooser();
   chooser.setCurrentDirectory(new File(System.getProperty("user.home")));
@@ -38,6 +40,11 @@ void launcher() {
 }
 
 void draw() {
-  image(p.returnImage(), 0, 0);
+  image(p.initialImage(), 0, 0);
+  int size = a.getListSize();
+  if (iter < size) {
+    a.fillColorValue(iter++);
+  }  
+ image(p.returnImage(), 0, 0);
 }
 

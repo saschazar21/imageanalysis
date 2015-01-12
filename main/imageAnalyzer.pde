@@ -7,11 +7,16 @@ class imageAnalyzer {
   public final int TOLERANCE = 7;
   imageProcessor img;
   ArrayList<Pixel> thePixels;
+  int[] possibleSquare = {0, 0};
   
   public imageAnalyzer(imageProcessor img) {
     this.img = img;
     this.thePixels = new ArrayList<Pixel>();
     this.launcher();
+  }
+  
+  public int getListSize() {
+    return this.thePixels.size();
   }
   
   private class Pixel {
@@ -111,8 +116,8 @@ class imageAnalyzer {
       }
     }
     
-    color[] pixelArray = this.convertToArray();
-    this.img.setPixelArray(pixelArray);
+    //color[] pixelArray = this.convertToArray();
+    //this.img.setPixelArray(pixelArray);
   }
   
   private void fillList() {
@@ -132,6 +137,29 @@ class imageAnalyzer {
         this.thePixels.add(new Pixel(c));
       }
     }
+  }
+  
+  public void fillColorValue(int index) {
+    color[] pixelArray = this.img.getPixelArray();
+    Pixel p = this.thePixels.get(index);
+    float sq = (float) Math.sqrt(p.amount);
+    //int restCol = (p.amount - (int) sq) / (int) sq;
+    int restCol = 0;
+    int current = this.possibleSquare[0] + this.possibleSquare[1] * this.img.theWidth;
+    for (int i = 0; i < ((int) sq + restCol); i++) {
+      for (int j = 0; j < (int) sq; j++) {
+        if ((current + j) < pixelArray.length) {
+          pixelArray[current + j] = color(p.getColor());
+        }
+      }
+      current += this.img.theWidth;
+    }
+    this.possibleSquare[0] += (int) sq;
+    if (this.possibleSquare[0] > this.img.theWidth) {
+      this.possibleSquare[0] -= (int) sq;
+      this.possibleSquare[1] += (int) sq + restCol;
+    }
+    this.img.setPixelArray(pixelArray);
   }
   
   private color[] convertToArray() {

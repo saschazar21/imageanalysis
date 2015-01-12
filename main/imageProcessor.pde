@@ -4,12 +4,14 @@ class imageProcessor extends PImage {
   public final int MAX_WIDTH = 640;   //2592;
   public final int MAX_HEIGHT = 480;  //1728;
   private PImage theImage;
+  private PImage initialImage;
   
   public int theWidth;
   public int theHeight;
   
   imageProcessor(String path) {
     this.theImage = loadImage(path);
+    this.initialImage = loadImage(path);
     
     if (this.theImage.width > MAX_WIDTH || this.theImage.height > MAX_HEIGHT) {
       this.resize();
@@ -64,5 +66,9 @@ class imageProcessor extends PImage {
   
   public PImage returnImage() {
     return this.theImage;
+  }
+  
+  public PImage initialImage() {
+    return this.initialImage;
   }
 }
