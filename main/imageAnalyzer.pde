@@ -1,17 +1,20 @@
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 
 class imageAnalyzer {
   
   public final int TOLERANCE = 7;
   imageProcessor img;
   ArrayList<Pixel> thePixels;
-  int[] possibleSquare = {0, 0};
+  LinkedList<Coordinate> coordinates;
   
   public imageAnalyzer(imageProcessor img) {
     this.img = img;
     this.thePixels = new ArrayList<Pixel>();
+    this.coordinates = new LinkedList<Coordinate>();
+    this.coordinates.add(new Coordinate(0, 0));
     this.launcher();
   }
   
@@ -101,6 +104,15 @@ class imageAnalyzer {
     }
   }
   
+  private class Coordinate {
+    public int x, y;
+    
+    public Coordinate(int x, int y) {
+      this.x = x;
+      this.y = y;
+    }
+  }
+  
   private void launcher() {
     this.fillList();
     Comparator<Pixel> c = new ColorComparator();
@@ -140,31 +152,40 @@ class imageAnalyzer {
   }
   
   public void fillColorValue(int index) {
+    int iter = 0;
     color[] pixelArray = this.img.getPixelArray();
     Pixel p = this.thePixels.get(index);
     float sq = (float) Math.sqrt(p.amount);
     
     int restCol = 0;
     if ((int) sq > 0) {
-      restCol = (p.amount - (int) sq) / (int) sq;
+      //restCol = (p.amount - (int) sq) / (int) sq;
+      sq = Math.round(sq);
     }
     
-    int current = this.possibleSquare[0] + this.possibleSquare[1] * this.img.theWidth;
+    Coordinate c = this.coordinates.get(iter++);
+    while ((c.x + sq) > this.img.theWidth || (c.y + sq + restCol) > this.img.theHeight) {
+      if (iter < this.coordinates.size()) {
+        c = this.coordinates.get(iter++);
+      } else {
+        break;
+      }
+    }
+    this.coordinates.remove(--iter);
+    int current = c.x + c.y * this.img.theWidth;
     for (int i = 0; i < ((int) sq + restCol); i++) {
       for (int j = 0; j < (int) sq; j++) {
-        if (current == 0 || (current + j) % this.img.theWidth != 0 && (current + j) < pixelArray.length) {
+        if ((current + j) < pixelArray.length) {
           pixelArray[current + j] = color(p.getColor());
         } else {
-          j = (int) sq;
+          break;
         }
       }
       current += this.img.theWidth;
     }
-    this.possibleSquare[0] += (int) sq;
-    if (this.possibleSquare[0] > this.img.theWidth) {
-      this.possibleSquare[0] = 0;
-      this.possibleSquare[1] += (int) sq + restCol;
-    }
+    this.coordinates.addLast(new Coordinate(c.x + (int) sq, c.y));
+    this.coordinates.addLast(new Coordinate(c.x, c.y + (int) sq + restCol));
+    
     this.img.setPixelArray(pixelArray);
   }
   

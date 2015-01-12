@@ -41,6 +41,7 @@ class imageProcessor extends PImage {
     System.out.println("Factors: " + widthFactor + ", " + heightFactor);
 //    if (this.isLandscape()) {
       this.theImage.resize(Math.round(newWidth), Math.round(newHeight));
+      this.initialImage.resize(Math.round(newWidth), Math.round(newHeight));
 //    } else {
 //      this.theImage.resize(Math.round(newHeight), Math.round(newWidth));
 //    }
