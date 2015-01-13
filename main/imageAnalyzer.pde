@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 class imageAnalyzer {
   
-  public final int TOLERANCE = 4;
+  public final int TOLERANCE = 3;
   imageProcessor img;
   ArrayList<Pixel> thePixels;
   LinkedList<Coordinate> coordinates;
