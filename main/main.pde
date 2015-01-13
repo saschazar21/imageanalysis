@@ -12,7 +12,6 @@ int mX, mY;
 
 void setup() {
   frameRate(24);
-  //size(640,480);
   JFileChooser chooser = new JFileChooser();
   chooser.setCurrentDirectory(new File(System.getProperty("user.home")));
   int result = chooser.showOpenDialog(this);
@@ -49,7 +48,6 @@ void draw() {
   image(p.returnImage(), 0, 0);
   fill(c[0], c[1], c[2]);
   noStroke();
-  translate(mX - width / 2, mY - height / 2);
   rectMode(CENTER);
   rect(mX, mY, rad, rad);
 }
@@ -61,9 +59,21 @@ void mouseDragged() {
 
 void keyPressed() {
   int size = a.getListSize();
-  if (key == 'n') {
+  if (key == TAB) {
     if (iter < size - 1) {
+      if (mX != (width / 2) && mY != (height / 2)) {
+        a.imprintRect(mX, mY, iter);
+      }
       iter++;
+      mX = width / 2;
+      mY = height / 2;
+    }
+  }
+  if (key == 'q') {
+    if (iter > 0) {
+      if (mX == (width / 2) && mY == (height / 2)) {
+        iter--;
+      }
     }
   }
 }

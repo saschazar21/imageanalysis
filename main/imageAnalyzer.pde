@@ -158,6 +158,24 @@ class imageAnalyzer {
     }
   }
   
+  public void imprintRect(int x, int y, int iter) {
+    Pixel p = this.thePixels.get(iter);
+    color[] pixelArray = this.img.getPixelArray();
+    int l = this.getRect(iter);
+    int lHalf = l / 2;
+    int current = (x - lHalf) + (y - lHalf) * this.img.theWidth;
+    
+    for (int i = 0; i < l; i++) {
+      for (int j = 0; j < l; j++) {
+        if ((current + j) > 0 && (current +j) < pixelArray.length) {
+          pixelArray[current + j] = color(p.getColor());
+        }
+      }
+      current += this.img.theWidth;
+    }
+    this.img.setPixelArray(pixelArray);
+  }
+  
   public int getRect(int iter) {
     Pixel p = this.thePixels.get(iter);
     
