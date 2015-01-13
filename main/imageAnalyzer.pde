@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 class imageAnalyzer {
   
-  public final int TOLERANCE = 7;
+  public final int TOLERANCE = 4;
   imageProcessor img;
   ArrayList<Pixel> thePixels;
   LinkedList<Coordinate> coordinates;
@@ -14,7 +14,6 @@ class imageAnalyzer {
     this.img = img;
     this.thePixels = new ArrayList<Pixel>();
     this.coordinates = new LinkedList<Coordinate>();
-    this.coordinates.add(new Coordinate(0, 0));
     this.launcher();
   }
   
@@ -111,6 +110,10 @@ class imageAnalyzer {
       this.x = x;
       this.y = y;
     }
+    
+    public String toString() {
+      return "Coordinate: " + this.x + ", " + this.y;
+    }
   }
   
   private void launcher() {
@@ -127,9 +130,6 @@ class imageAnalyzer {
         System.out.println(p);
       }
     }
-    
-    //color[] pixelArray = this.convertToArray();
-    //this.img.setPixelArray(pixelArray);
   }
   
   private void fillList() {
@@ -159,34 +159,41 @@ class imageAnalyzer {
     
     int restCol = 0;
     if ((int) sq > 0) {
-      //restCol = (p.amount - (int) sq) / (int) sq;
-      sq = Math.round(sq);
+      restCol = (p.amount - (int) sq) / (int) sq;
+      //sq = Math.round(sq);
     }
     
-    Coordinate c = this.coordinates.get(iter++);
-    while ((c.x + sq) > this.img.theWidth || (c.y + sq + restCol) > this.img.theHeight) {
-      if (iter < this.coordinates.size()) {
-        c = this.coordinates.get(iter++);
-      } else {
-        break;
-      }
-    }
-    this.coordinates.remove(--iter);
-    int current = c.x + c.y * this.img.theWidth;
+    Coordinate c = this.searchColor(p.getColor());
+    int current = (c.x - (int) sq / 2) + (c.y - (int) sq / 2) * this.img.theWidth;
     for (int i = 0; i < ((int) sq + restCol); i++) {
       for (int j = 0; j < (int) sq; j++) {
-        if ((current + j) < pixelArray.length) {
+        if ((current + j) > 0 && (current + j) < pixelArray.length) {
           pixelArray[current + j] = color(p.getColor());
         } else {
-          break;
+          j = (int) sq;
         }
       }
       current += this.img.theWidth;
     }
-    this.coordinates.addLast(new Coordinate(c.x + (int) sq, c.y));
-    this.coordinates.addLast(new Coordinate(c.x, c.y + (int) sq + restCol));
     
     this.img.setPixelArray(pixelArray);
+  }
+  
+  private Coordinate searchColor(color c) {
+    Coordinate coord = new Coordinate(Integer.MAX_VALUE,Integer.MAX_VALUE);
+    color[] pixelArray = this.img.getInitialArray();
+    int rand = (int) random(pixelArray.length);
+    for (int i = rand; i < pixelArray.length; i++) {
+      Pixel p = new Pixel(pixelArray[i]);
+      int comp = p.compareTo(c);
+      if (comp == 0) {
+        int x = i % this.img.theWidth;
+        int y = i / this.img.theWidth;
+        coord = new Coordinate(x, y);
+        break;
+      }
+    }
+    return coord;
   }
   
   private color[] convertToArray() {

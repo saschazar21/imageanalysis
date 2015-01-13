@@ -60,6 +60,10 @@ class imageProcessor extends PImage {
     return this.theImage.pixels;
   }
   
+  public color[] getInitialArray() {
+    return this.initialImage.pixels;
+  }
+  
   public void setPixelArray(color[] c) {
     this.theImage.pixels = c;
     this.theImage.updatePixels();
