@@ -13,6 +13,6 @@ from the most common to the least common RGB-values.
 <p>
 Use your mouse to navigate the color square to the position you prefer, press 'TAB'
 to imprint it on the image.<br>
-Press 'TAB' without prior movement to skip current square.<br>
-Press 'ESC' without prior movement to repeat previous square.
+Press <b>'TAB'</b> without prior movement to skip current square.<br>
+Press <b>'q'</b> without prior movement to repeat previous square.
 </p>
