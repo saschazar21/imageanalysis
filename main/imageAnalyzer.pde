@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 class imageAnalyzer {
   
-  public final int TOLERANCE = 7;
+  public final int TOLERANCE = 4;
   imageProcessor img;
   ArrayList<Pixel> thePixels;
   color[] lastState;
