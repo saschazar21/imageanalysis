@@ -76,5 +76,13 @@ void keyPressed() {
       }
     }
   }
+  if (key == 'w') {
+    if (iter != 0) {
+      a.stepBack();
+      iter--;
+      mX = width / 2;
+      mY = height / 2;
+    }
+  }
 }
 

@@ -8,6 +8,7 @@ class imageAnalyzer {
   public final int TOLERANCE = 7;
   imageProcessor img;
   ArrayList<Pixel> thePixels;
+  color[] lastState;
   LinkedList<Coordinate> coordinates;
   
   public imageAnalyzer(imageProcessor img) {
@@ -165,6 +166,9 @@ class imageAnalyzer {
     int lHalf = l / 2;
     int current = (x - lHalf) + (y - lHalf) * this.img.theWidth;
     
+    lastState = new color[pixelArray.length];
+    System.arraycopy(pixelArray, 0, lastState, 0, pixelArray.length);
+    
     for (int i = 0; i < l; i++) {
       for (int j = 0; j < l; j++) {
         if ((current + j) > 0 && (current +j) < pixelArray.length) {
@@ -189,6 +193,10 @@ class imageAnalyzer {
     Pixel p = this.thePixels.get(iter);
     
     return p.getColorArray();
+  }
+  
+  public void stepBack() {
+    this.img.setPixelArray(this.lastState);
   }
   
   private color[] convertToArray() {
