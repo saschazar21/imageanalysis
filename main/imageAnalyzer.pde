@@ -180,19 +180,23 @@ class imageAnalyzer {
   }
   
   private Coordinate searchColor(color c) {
+    boolean found = false;
     Coordinate coord = new Coordinate(Integer.MAX_VALUE,Integer.MAX_VALUE);
     color[] pixelArray = this.img.getInitialArray();
-    int rand = (int) random(pixelArray.length);
-    for (int i = rand; i < pixelArray.length; i++) {
-      Pixel p = new Pixel(pixelArray[i]);
-      int comp = p.compareTo(c);
-      if (comp == 0) {
-        int x = i % this.img.theWidth;
-        int y = i / this.img.theWidth;
-        coord = new Coordinate(x, y);
-        break;
+    do {
+      int rand = (int) random(pixelArray.length);
+      for (int i = rand; i < pixelArray.length; i++) {
+        Pixel p = new Pixel(pixelArray[i]);
+        int comp = p.compareTo(c);
+        if (comp == 0) {
+          found = true;
+          int x = i % this.img.theWidth;
+          int y = i / this.img.theWidth;
+          coord = new Coordinate(x, y);
+          break;
+        }
       }
-    }
+    } while (!found);
     return coord;
   }
   
