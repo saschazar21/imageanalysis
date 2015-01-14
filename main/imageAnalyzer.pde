@@ -179,6 +179,14 @@ class imageAnalyzer {
     this.img.setPixelArray(pixelArray);
   }
   
+  public color getColor(int index) {
+    return this.thePixels.get(index).getColor();
+  }
+  
+  public int getAmount(int index) {
+    return this.thePixels.get(index).amount;
+  }
+  
   private Coordinate searchColor(color c) {
     boolean found = false;
     Coordinate coord = new Coordinate(Integer.MAX_VALUE,Integer.MAX_VALUE);
