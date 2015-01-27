@@ -7,6 +7,7 @@ class imageAnalyzer {
   
   public final int TOLERANCE = 3;
   imageProcessor img;
+  Pixel[] pArray;
   ArrayList<Pixel> thePixels;
   LinkedList<Coordinate> coordinates;
   
@@ -14,6 +15,7 @@ class imageAnalyzer {
     this.img = img;
     this.thePixels = new ArrayList<Pixel>();
     this.coordinates = new LinkedList<Coordinate>();
+    this.pArray = new Pixel[this.img.getPixelArray().length];
     this.launcher();
   }
   
@@ -25,10 +27,12 @@ class imageAnalyzer {
     
     private color c;
     public int amount;
+    private ArrayList<Coordinate> coord;
     
     Pixel(color c) {
       this.c = c;
       this.amount = 0;
+      this.coord = new ArrayList<Coordinate>();
     }
     
     public void iterate() {
@@ -37,6 +41,14 @@ class imageAnalyzer {
     
     public color getColor() {
       return this.c;
+    }
+    
+    public ArrayList<Coordinate> getCoordinates() {
+      return this.coord;
+    }
+    
+    public void addCoordinate(Coordinate c) {
+      this.coord.add(c);
     }
     
     public String toString() {
@@ -133,6 +145,7 @@ class imageAnalyzer {
   }
   
   private void fillList() {
+    int pos = 0;
     color[] pixelArray = this.img.getPixelArray();
     System.out.println("Amount of Pixels in Image: " + pixelArray.length);
     for (color c : pixelArray) {
@@ -142,12 +155,18 @@ class imageAnalyzer {
         if (p.compareTo(c) == 0 && !found) {
           found = true;
           p.colorAvg(c);
+          p.addCoordinate(this.getPosition(pos));
+          this.pArray[pos] = p;
         }
         iter++;
       }
       if (!found) {
-        this.thePixels.add(new Pixel(c));
+        Pixel p = new Pixel(c);
+        this.thePixels.add(p);
+        p.addCoordinate(this.getPosition(pos));
+        this.pArray[pos] = p;
       }
+      pos++;
     }
   }
   
@@ -179,12 +198,40 @@ class imageAnalyzer {
     this.img.setPixelArray(pixelArray);
   }
   
+  private Coordinate getPosition(int index) {
+    int w = this.img.theWidth;
+    int x = index % w;
+    int y = index / w;
+    return new Coordinate(x, y);
+  }
+  
   public color getColor(int index) {
     return this.thePixels.get(index).getColor();
   }
   
   public int getAmount(int index) {
     return this.thePixels.get(index).amount;
+  }
+  
+  public int[][] getCoordinates(int index) {
+    int iter = 0;
+    Pixel p = this.thePixels.get(index);
+    ArrayList<Coordinate> cList = p.getCoordinates();
+    int[][] cArray = new int[cList.size()][2];
+    for (Coordinate c : cList) {
+      cArray[iter][0] = c.x;
+      cArray[iter][1] = c.y;
+      iter++;
+    }
+    
+    return cArray;
+  }
+  
+  public int getIndex(int[] c) {
+    int index = 0;
+    index += c[1] * this.img.theWidth;
+    index += c[0];
+    return this.thePixels.indexOf(this.pArray[index]);
   }
   
   private Coordinate searchColor(color c) {

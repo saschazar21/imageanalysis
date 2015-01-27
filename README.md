@@ -12,8 +12,9 @@ from the most common to the least common RGB-values.
 
 <p>
 Open any desired image and let the algorithm do its work.<br>
-It will rearrange the extracted color values to the first possible color value found
-after a randomly calculated starting point within the pixel array, which is also inside
-a given tolerance area.<br>
-To skip the process and show a calculated color wheel, press <b>'w'</b>.
+After computation succeeded you will be presented with an image filled with colored dots 
+on each position containing the same color value as the pixel over which your mouse is 
+currently hovering.<br>
+Press <b>'w'</b> to show/hide a circle containing the same color as well as having a
+representational size.
 </p>

@@ -7,14 +7,10 @@ imageProcessor p;
 String location;
 String ext;
 int iter = 0;
-boolean theSwitch = false;
-float start = -HALF_PI;
-int diameter = 0;
-float interval = 0;
+boolean switcher = false;
 
 void setup() {
   frameRate(24);
-  //size(640,480);
   JFileChooser chooser = new JFileChooser();
   chooser.setCurrentDirectory(new File(System.getProperty("user.home")));
   int result = chooser.showOpenDialog(this);
@@ -36,7 +32,6 @@ void launcher() {
     || ext.equals("tiff")) { 
       p = new imageProcessor(location);
       a = new imageAnalyzer(p);
-      interval = radians(360.0 / (float) p.returnImage().pixels.length);
   } else {
       System.out.println("No valid file extension. \nTerminating.");
       System.exit(1);
@@ -45,41 +40,27 @@ void launcher() {
 }
 
 void draw() {
-  int size = a.getListSize();
-  if (theSwitch) {
-    if (iter < size) {
-      int newDia = Math.round(diameter * 0.75);
-      int amount = a.getAmount(iter);
-      fill(a.getColor(iter));
-      noStroke();
-      arc(width / 2, height / 2, newDia, newDia, start, start + interval * amount, PIE);
-      start += interval * amount;
-      iter++;
-     }
-     fill(255, 255, 255);
-     noStroke();
-     arc(width / 2, height / 2, diameter / 2, diameter / 2, 0, TWO_PI, PIE);
-  } else {
-    image(p.initialImage(), 0, 0);
-    if (iter < size) {
-      a.fillColorValue(iter++);
-    }  
-    image(p.returnImage(), 0, 0);
+  image(p.initialImage(), 0, 0);
+  int mouseCoord[] = {pmouseX, pmouseY};
+  int index = a.getIndex(mouseCoord);
+  int am = a.getAmount(index);
+  am = am / 10;
+  int[][] coord = a.getCoordinates(index);
+  color c = a.getColor(index);
+  fill(c);
+  noStroke();
+  for (int i = 0; i < coord.length; i++) {
+    arc(coord[i][0], coord[i][1], 6, 6, 0, TWO_PI);
+  }
+  if (switcher) {
+    stroke(128, 128, 128);
+    arc(pmouseX, pmouseY, am, am, 0, TWO_PI);
   }
 }
 
 void keyPressed() {
   if (key == 'w') {
-    iter = 0;
-    theSwitch = true;
-    fill(255);
-    noStroke();
-    if (p.isLandscape()) {
-      diameter = Math.round(height * 0.8);
-    } else {
-      diameter = Math.round(width * 0.8);
-    }
-    arc(width / 2, height / 2, diameter, diameter, 0, TWO_PI, PIE);
+    switcher = !switcher ? true : false;
   }
 }
 
