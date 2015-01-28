@@ -8,7 +8,7 @@ from the most common to the least common RGB-values.
 
 <hr>
 
-<h1>Main Development Branch</h1>
+<h1>Mouselines Development Branch</h1>
 
 <p>
 Open any desired image and let the algorithm do its work.<br>

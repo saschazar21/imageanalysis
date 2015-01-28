@@ -43,8 +43,7 @@ void draw() {
   image(p.initialImage(), 0, 0);
   int mouseCoord[] = {pmouseX, pmouseY};
   int index = a.getIndex(mouseCoord);
-  int am = a.getAmount(index);
-  am = am / 10;
+  int am = (int) sqrt(a.getAmount(index));
   int[][] coord = a.getCoordinates(index);
   color c = a.getColor(index);
   fill(c);
