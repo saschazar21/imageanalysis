@@ -15,6 +15,8 @@ Open any desired image and let the algorithm do its work.<br>
 After computation succeeded you will be presented with an image filled with colored dots 
 on each position containing the same color value as the pixel over which your mouse is 
 currently hovering.<br>
+Additionally, a second window opens and displays the colored circles aligned in circle, 
+showing each possible neighboring color to the actual color value in the image.<br>
 Press <b>'w'</b> to show/hide a circle containing the same color as well as having a
 representational size.
 </p>

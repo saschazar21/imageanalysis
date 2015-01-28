@@ -1,13 +1,17 @@
+import javax.swing.JFrame;
 import javax.swing.JFileChooser;
 import java.io.File;
 
+PFrame f;
+circleApplet cApplet;
 File testFile;
 imageAnalyzer a;
 imageProcessor p;
 String location;
 String ext;
 int iter = 0;
-boolean switcher = false;
+int globalIndex = 0;
+boolean switcher = true;
 
 void setup() {
   frameRate(24);
@@ -24,6 +28,7 @@ void setup() {
   }
   this.launcher();
   size(p.theWidth, p.theHeight);
+  f = new PFrame();
 }
 
 void launcher() {
@@ -43,6 +48,7 @@ void draw() {
   image(p.initialImage(), 0, 0);
   int mouseCoord[] = {pmouseX, pmouseY};
   int index = a.getIndex(mouseCoord);
+  globalIndex = index;
   int am = (int) sqrt(a.getAmount(index));
   int[][] coord = a.getCoordinates(index);
   color c = a.getColor(index);
@@ -63,3 +69,49 @@ void keyPressed() {
   }
 }
 
+public class circleApplet extends PApplet {
+  int centerX = 240;
+  int centerY = 240;
+  int pixelSize;
+  
+  public void setup() {
+    size(480, 480);
+    pixelSize = p.getSize();
+  }
+  
+  public void draw() {
+    background(255);
+    float[][] ballCoord = new float[a.getListSize()][2];
+    int index = 0;
+    int total = 0;
+    float deg = 360f / pixelSize;
+    for (int i = 0; i < pixelSize; i++) {
+      int am = a.getAmount(index);
+      float arcX = centerX + (centerX * 0.8) * cos(deg * total);
+      float arcY = centerY + (centerY * 0.8) * sin(deg * total);
+      fill(a.getColor(index));
+      noStroke();
+      ellipse(arcX, arcY, sqrt(am) / 2, sqrt(am) / 2);
+      ballCoord[index][0] = arcX;
+      ballCoord[index][1] = arcY;
+      i += am;
+      total += sqrt(am);
+      index++;
+    }
+    ArrayList<Integer> aL = a.getNeighbors(globalIndex);
+    for (int i : aL) {
+      stroke(a.getColor(i));
+      line(ballCoord[globalIndex][0], ballCoord[globalIndex][1], ballCoord[i][0], ballCoord[i][1]);
+    }
+  }
+}
+
+public class PFrame extends JFrame {
+  public PFrame() {
+    setBounds(0, 0, 480, 480);
+    cApplet = new circleApplet();
+    add(cApplet);
+    cApplet.init();
+    show();
+  }
+}

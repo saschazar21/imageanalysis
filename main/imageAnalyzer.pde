@@ -234,6 +234,22 @@ class imageAnalyzer {
     return this.thePixels.indexOf(this.pArray[index]);
   }
   
+  public ArrayList<Integer> getNeighbors(int index) {
+    ArrayList<Integer> n = new ArrayList<Integer>();
+    Pixel p = this.thePixels.get(index);
+    for (int i = 0; i < pArray.length; i++) {
+      if (p.equals(pArray[i])) {
+        if ((i % this.img.theWidth) > 0 && (i > 0)) {
+          n.add(this.thePixels.indexOf(pArray[i - 1]));
+        }
+        if ((i % this.img.theWidth) < (this.img.theWidth - 1) && i > 0) {
+          n.add(this.thePixels.indexOf(pArray[i - 1]));
+        }
+      }
+    }
+    return n;
+  }
+  
   private Coordinate searchColor(color c) {
     boolean found = false;
     Coordinate coord = new Coordinate(Integer.MAX_VALUE,Integer.MAX_VALUE);
